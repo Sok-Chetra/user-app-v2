@@ -1,0 +1,47 @@
+query GetServicesCategories {
+  categories: homekong_db_services(where: { parent_id: { _is_null: true } }) {
+    id
+    icon
+    code
+    name_en
+    name_zh
+    isParentService
+  }
+}
+
+query GetSubServices($parent_code: String!) {
+  services: homekong_db_services(
+    where: { parentService: { code: { _eq: $parent_code } } }
+  ) {
+    id
+    icon
+    code
+    name_en
+    name_zh
+    isParentService
+    subServices_aggregate {
+      aggregate {
+        count
+      }
+    }
+  }
+}
+
+query GetServiceQuestion($code: String!) {
+  homekong_db_services(where: {code: {_eq: $code}}) {
+     id
+    name_en
+    name_zh
+    code
+    icon
+    isParentService
+    service_questions {
+      question {
+        id
+        options
+        questions
+        type
+      }
+    }
+  }
+}
